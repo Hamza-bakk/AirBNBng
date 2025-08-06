@@ -1,27 +1,91 @@
-# AirBNBng
+# 🏡 Plateforme de Réservation de Biens Immobiliers - Angular + Firebase
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.16.
+> Application développée avec Angular 16 et Firebase Realtime Database. Elle permet de gérer des biens immobiliers et de réserver en ligne selon deux rôles : administrateur et client.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 📌 Présentation
 
-## Code scaffolding
+Cette application simule une plateforme de location de biens immobiliers. Elle offre deux expériences utilisateur distinctes :
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- 👩‍💼 **Administrateur** : gère les biens immobiliers.
+- 🧑‍💻 **Client** : peut réserver, consulter ou annuler ses réservations.
 
-## Build
+La base de données en temps réel de **Firebase** permet une synchronisation instantanée des données sur tous les clients connectés.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+---
 
-## Running unit tests
+## 👥 Gestion des rôles
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### 🔐 Authentification
 
-## Running end-to-end tests
+Chaque utilisateur est identifié et possède un rôle stocké en base :
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- `admin` : accès à la gestion complète des biens.
+- `client` : accès à la réservation et consultation.
 
-## Further help
+---
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## 🛠️ Fonctionnalités par rôle
+
+### 🧑‍💼 Client
+
+- 📅 **Réserver un bien** :
+  - Saisie des dates d’arrivée / départ
+  - Nombre de personnes
+  - Prix total calculé automatiquement
+  - Commentaire facultatif
+
+- 📋 **Consulter ses réservations** :
+  - Vue détaillée
+  - Photos, statut, dates, prix
+
+- ❌ **Annuler une réservation** :
+  - Possible uniquement si la réservation est encore en attente (`en_attente`)
+
+### 👨‍💼 Administrateur
+
+- ➕ **Ajouter un bien**
+- ✏️ **Modifier un bien**
+- 🗑️ **Supprimer un bien**
+- 🔍 **Consulter tous les biens disponibles**
+
+---
+
+## 🧱 Architecture
+
+### Technologies
+- **Frontend** : Angular 16
+- **Backend** : Firebase Realtime Database
+- **Styles** : Bootstrap 5
+
+### Dossiers principaux
+- `models/` : contient les classes `Bien` et `Reservation`
+- `services/` :
+  - `firebase-bien.service.ts`
+  - `firebase-reservation.service.ts`
+  - `auth.service.ts`
+
+---
+
+## 💡 Modèle de données
+
+### Reservation
+```ts
+export class Reservation {
+  id?: string;
+  bienId: string;
+  clientId: string;
+  dateArrivee: Date;
+  dateDepart: Date;
+  nombrePersonnes: number;
+  prixTotal: number;
+  statut: 'en_attente' | 'confirmee' | 'annulee';
+  dateReservation: Date;
+  commentaire?: string;
+
+  calculerDuree(): number { ... }
+  estActive(): boolean { ... }
+  peutEtreAnnulee(): boolean { ... }
+  chevauche(dateDebut: Date, dateFin: Date): boolean { ... }
+}
