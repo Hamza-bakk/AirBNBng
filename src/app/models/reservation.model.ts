@@ -25,7 +25,9 @@ export class Reservation {
 
   // Méthodes métier
   calculerDuree(): number {
-    const diffTime = Math.abs(this.dateDepart.getTime() - this.dateArrivee.getTime());
+    const diffTime = Math.abs(
+      this.dateDepart.getTime() - this.dateArrivee.getTime()
+    );
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
 
@@ -37,7 +39,7 @@ export class Reservation {
     const maintenant = new Date();
     const unJourAvant = new Date(this.dateArrivee);
     unJourAvant.setDate(unJourAvant.getDate() - 1);
-    
+
     return this.statut === 'confirmee' && maintenant < unJourAvant;
   }
 

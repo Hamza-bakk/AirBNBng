@@ -19,9 +19,17 @@ export class AuthService {
     return !!this.utilisateurSubject.getValue();
   }
 
-  getRole(): string | undefined {
-    return this.utilisateurSubject.value?.role;
+  async waitForUtilisateur(): Promise<Utilisateur | null> {
+    return new Promise((resolve) => {
+      const sub = this.utilisateur$.subscribe((user) => {
+        if (user !== null) {
+          resolve(user);
+          sub.unsubscribe();
+        }
+      });
+    });
   }
+
   logout() {
     this.setUtilisateur(null);
   }

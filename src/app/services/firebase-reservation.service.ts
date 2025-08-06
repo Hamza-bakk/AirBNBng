@@ -10,7 +10,6 @@ import {
   update,
 } from 'firebase/database';
 import { db } from './firebase.service';
-
 import { Reservation } from '../models/reservation.model';
 
 @Injectable({
@@ -25,18 +24,19 @@ export class FirebaseReservationService {
     await set(newRef, { ...res });
   }
 
+  async updateReservation(reservation: Reservation): Promise<void> {
+    if (!reservation.id) throw new Error('ID réservation manquant');
+    const reservationRef = ref(db, `reservations/${reservation.id}`);
+    return update(reservationRef, { ...reservation });
+  }
+
   async getReservationsByBien(bienId: string): Promise<Reservation[]> {
     const q = query(
       this.reservationsRef,
       orderByChild('bienId'),
       equalTo(bienId)
     );
-    const snap = await get(q);
-    const res: Reservation[] = [];
-    snap.forEach((child) => {
-      res.push({ id: child.key, ...child.val() });
-    });
-    return res;
+    return this.executeQuery(q);
   }
 
   async getReservationsByClientId(clientId: string): Promise<Reservation[]> {
@@ -45,7 +45,12 @@ export class FirebaseReservationService {
       orderByChild('clientId'),
       equalTo(clientId)
     );
-    const snap = await get(q);
+    return this.executeQuery(q);
+  }
+
+
+  async getAllReservations(): Promise<Reservation[]> {
+    const snap = await get(this.reservationsRef);
     const res: Reservation[] = [];
     snap.forEach((child) => {
       res.push({ id: child.key, ...child.val() });
@@ -53,9 +58,15 @@ export class FirebaseReservationService {
     return res;
   }
 
-  async updateReservation(reservation: Reservation): Promise<void> {
-    if (!reservation.id) throw new Error('ID réservation manquant');
-    const reservationRef = ref(db, `reservations/${reservation.id}`);
-    return update(reservationRef, { ...reservation });
+
+  private async executeQuery(
+    q: ReturnType<typeof query>
+  ): Promise<Reservation[]> {
+    const snap = await get(q);
+    const res: Reservation[] = [];
+    snap.forEach((child) => {
+      res.push({ id: child.key, ...child.val() });
+    });
+    return res;
   }
 }

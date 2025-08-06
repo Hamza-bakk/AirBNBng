@@ -10,9 +10,10 @@ import { BienComponent } from './bien/bien.component';
 import { ReservationComponent } from './reservation/reservation.component';
 import { HomeComponent } from './home/home.component';
 import { AdminComponent } from './admin/admin.component';
+import { DecisionComponent } from './decision/decision.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, UserComponent, BienComponent, ReservationComponent, HomeComponent, AdminComponent],
+  declarations: [AppComponent, HeaderComponent, UserComponent, BienComponent, ReservationComponent, HomeComponent, AdminComponent, DecisionComponent],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],

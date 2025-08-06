@@ -1,0 +1,72 @@
+<div class="container mt-4">
+  <h2 class="mb-4 text-primary">Réservations en attente</h2>
+
+  <div *ngIf="reservationsEnAttente.length === 0" class="alert alert-info">
+    Aucune réservation en attente.
+  </div>
+
+  <div *ngFor="let r of reservationsEnAttente" class="card mb-3 shadow-sm">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img
+          *ngIf="r.bien?.photos?.length"
+          [src]="r.bien?.photos"
+          class="img-fluid rounded-start"
+          alt="Photo"
+        />
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">{{ r.bien?.titre }}</h5>
+          <p class="card-text">
+            <strong>Client ID :</strong> {{ r.clientId }}<br />
+            <strong>Du :</strong> {{ r.dateArrivee | date : "shortDate" }} au
+            {{ r.dateDepart | date : "shortDate" }}<br />
+            <strong>Personnes :</strong> {{ r.nombrePersonnes }}<br />
+            <strong>Prix :</strong> {{ r.prixTotal }} €<br />
+            <em>{{ r.commentaire }}</em>
+          </p>
+          <button class="btn btn-success me-2" (click)="valider(r)">
+            Accepter
+          </button>
+          <button class="btn btn-danger" (click)="refuser(r)">Refuser</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <h2 class="mb-4 text-secondary">Autres réservations</h2>
+
+  <div *ngIf="autresReservations.length === 0" class="alert alert-info">
+    Aucune autre réservation.
+  </div>
+
+  <div *ngFor="let r of autresReservations" class="card mb-3 shadow-sm">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img
+          *ngIf="r.bien?.photos?.length"
+          [src]="r.bien?.photos"
+          class="img-fluid rounded-start"
+          alt="Photo"
+        />
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">{{ r.bien?.titre }}</h5>
+          <p class="card-text">
+            <strong>Client ID :</strong> {{ r.clientId }}<br />
+            <strong>Du :</strong> {{ r.dateArrivee | date : "shortDate" }} au
+            {{ r.dateDepart | date : "shortDate" }}<br />
+            <strong>Personnes :</strong> {{ r.nombrePersonnes }}<br />
+            <strong>Prix :</strong> {{ r.prixTotal }} €<br />
+            <em>{{ r.commentaire }}</em>
+          </p>
+          <span class="badge bg-info text-dark">{{ r.statut }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
