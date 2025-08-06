@@ -1,0 +1,40 @@
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Nos Biens</h2>
+
+  <div class="row">
+    <div class="col-md-4 mb-4" *ngFor="let bien of biensAffiches">
+      <div class="card shadow-sm h-100">
+        <img
+          [src]="bien.photos[0]"
+          class="card-img-top"
+          [alt]="bien.titre"
+          style="height: 220px; object-fit: cover"
+        />
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ bien.titre }}</h5>
+          <p class="card-text fw-bold mb-1">{{ bien.prix }} €/nuit</p>
+          <p class="card-text text-muted mb-2">
+            {{ bien.ville }} - {{ bien.capacite }} pers.
+          </p>
+          <p class="card-text text-muted small mb-3">
+            Équipements : {{ bien.equipements.join(", ") }}
+          </p>
+          <button
+  class="btn btn-danger mt-auto w-100"
+  (click)="goToReservation(bien.id!)"
+>
+  Réserver
+</button>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center" *ngIf="biensAffiches.length < biens.length">
+    <button (click)="afficherPlus()" class="btn btn-outline-primary">
+      Afficher plus
+    </button>
+  </div>
+</div>

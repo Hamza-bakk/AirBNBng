@@ -1,0 +1,142 @@
+<div
+  *ngIf="modeMesReservations; else formulaireReservation"
+  class="container mt-4"
+>
+  <h2 class="mb-4 text-primary text-center">Mes réservations</h2>
+
+  <div
+    *ngIf="mesReservations.length === 0"
+    class="alert alert-warning text-center"
+  >
+    Aucune réservation trouvée.
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="col" *ngFor="let r of mesReservations">
+      <div class="card h-100 shadow border-0">
+        <img
+          *ngIf="r.bien?.photos?.length"
+          [src]="r.bien?.photos"
+          class="card-img-top"
+          alt="Photo du bien"
+          style="height: 200px; object-fit: cover"
+        />
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title text-dark mb-1">
+            {{ r.bien?.titre || "Titre inconnu" }}
+          </h5>
+          <p class="text-muted mb-2">
+            <i class="bi bi-geo-alt-fill me-1"></i>
+            {{ r.bien?.ville || "Ville inconnue" }}
+          </p>
+
+          <p class="mb-1">
+            <strong>Dates :</strong>
+            {{ r.dateArrivee | date : "shortDate" }} →
+            {{ r.dateDepart | date : "shortDate" }}
+          </p>
+          <p class="mb-1">
+            <strong>Personnes :</strong> {{ r.nombrePersonnes }}
+          </p>
+          <p class="mb-1"><strong>Prix total :</strong> {{ r.prixTotal }} €</p>
+          <p class="fst-italic text-muted" *ngIf="r.commentaire">
+            {{ r.commentaire }}
+          </p>
+
+          <div
+            class="mt-auto d-flex justify-content-between align-items-center"
+          >
+            <span
+              class="badge px-3 py-2"
+              [ngClass]="{
+                'bg-secondary': r.statut === 'en_attente',
+                'bg-success': r.statut === 'confirmee',
+                'bg-danger': r.statut === 'annulee'
+              }"
+            >
+              {{ r.statut | uppercase }}
+            </span>
+
+            <button
+              *ngIf="r.statut === 'en_attente'"
+              class="btn btn-sm btn-outline-danger"
+              (click)="annulerReservation(r)"
+            >
+              <i class="bi bi-x-circle me-1"></i> Annuler
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #formulaireReservation>
+  <div class="container mt-5" *ngIf="bien">
+    <h2 class="text-center mb-4">Réserver : {{ bien.titre }}</h2>
+
+    <form (ngSubmit)="reserver()" class="mx-auto" style="max-width: 500px">
+      <div class="mb-3">
+        <label for="arrivee" class="form-label">Date d'arrivée</label>
+        <input
+          type="date"
+          id="arrivee"
+          class="form-control"
+          [(ngModel)]="dateArrivee"
+          name="arrivee"
+          required
+          (change)="calculerPrixTotal()"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="depart" class="form-label">Date de départ</label>
+        <input
+          type="date"
+          id="depart"
+          class="form-control"
+          [(ngModel)]="dateDepart"
+          name="depart"
+          required
+          (change)="calculerPrixTotal()"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="nb" class="form-label">Nombre de personnes</label>
+        <input
+          type="number"
+          id="nb"
+          class="form-control"
+          [(ngModel)]="nombrePersonnes"
+          name="nb"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="commentaire" class="form-label">Commentaire</label>
+        <textarea
+          id="commentaire"
+          class="form-control"
+          [(ngModel)]="commentaire"
+          name="commentaire"
+          rows="3"
+        ></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Prix total estimé</label>
+        <div class="form-control text-end bg-light fw-bold">
+          {{ prixTotal }} €
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-success w-100">Réserver</button>
+    </form>
+
+    <div *ngIf="message" class="alert alert-success mt-3 text-center">
+      {{ message }}
+    </div>
+  </div></ng-template
+>

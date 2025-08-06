@@ -1,0 +1,109 @@
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Gestion des Biens</h2>
+
+  <!-- Formulaire de création / édition -->
+  <form (ngSubmit)="enregistrerBien()" class="mb-5">
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label">Image du bien</label>
+        <input
+          type="file"
+          (change)="onFileSelected($event)"
+          class="form-control"
+          accept="image/*"
+        />
+      </div>
+
+      <div class="col-md-6">
+        <input
+          [(ngModel)]="bienForm.titre"
+          name="titre"
+          class="form-control"
+          placeholder="Titre"
+          required
+        />
+      </div>
+      <div class="col-md-6">
+        <input
+          [(ngModel)]="bienForm.ville"
+          name="ville"
+          class="form-control"
+          placeholder="Ville"
+          required
+        />
+      </div>
+      <div class="col-md-6">
+        <input
+          [(ngModel)]="bienForm.prix"
+          name="prix"
+          type="number"
+          class="form-control"
+          placeholder="Prix"
+          required
+        />
+      </div>
+      <div class="col-md-6">
+        <input
+          [(ngModel)]="bienForm.capacite"
+          name="capacite"
+          type="number"
+          class="form-control"
+          placeholder="Capacité"
+          required
+        />
+      </div>
+      <div class="col-12">
+        <textarea
+          [(ngModel)]="bienForm.description"
+          name="description"
+          class="form-control"
+          placeholder="Description"
+          rows="3"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="mt-3 d-flex justify-content-between">
+      <button type="submit" class="btn btn-success">
+        {{ editerBienId ? "Mettre à jour" : "Ajouter" }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="annulerEdition()"
+        *ngIf="editerBienId"
+      >
+        Annuler
+      </button>
+    </div>
+  </form>
+
+  <!-- Liste des biens -->
+  <div class="row">
+    <div class="col-md-4 mb-4" *ngFor="let bien of biens">
+      <div class="card h-100 shadow">
+        <img
+          [src]="bien.photos[0] || 'assets/default.jpg'"
+          class="card-img-top"
+          style="height: 200px; object-fit: cover"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ bien.titre }}</h5>
+          <p>{{ bien.ville }} - {{ bien.prix }} € / nuit</p>
+          <p class="small text-muted">Capacité : {{ bien.capacite }} pers.</p>
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-sm btn-warning" (click)="editerBien(bien)">
+              Modifier
+            </button>
+            <button
+              class="btn btn-sm btn-danger"
+              (click)="supprimerBien(bien.id!)"
+            >
+              Supprimer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,119 @@
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">Connexion / Inscription</h2>
+
+  <!-- Zone Non Connecté -->
+  <div *ngIf="!(authService.utilisateur$ | async); else connected">
+    <!-- Tabs Connexion / Inscription -->
+    <ul class="nav nav-tabs justify-content-center mb-4">
+      <li class="nav-item">
+       <a
+  class="nav-link"
+  href="#"
+  [class.active]="mode === 'login'"
+  (click)="mode = 'login'; $event.preventDefault()"
+>
+  Connexion
+</a>
+
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          [class.active]="mode === 'register'"
+          (click)="mode = 'register'; $event.preventDefault()"
+          href="#"
+          >Inscription</a
+        >
+      </li>
+    </ul>
+
+    <!-- Connexion -->
+    <form
+      *ngIf="mode === 'login'"
+      (ngSubmit)="login()"
+      class="mx-auto"
+      style="max-width: 400px"
+    >
+      <div class="mb-3">
+        <label>Email</label>
+        <input
+          [(ngModel)]="email"
+          name="emailLogin"
+          type="email"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label>Mot de passe</label>
+        <input
+          [(ngModel)]="password"
+          name="passwordLogin"
+          type="password"
+          class="form-control"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+    </form>
+
+    <!-- Inscription -->
+    <form
+      *ngIf="mode === 'register'"
+      (ngSubmit)="register()"
+      class="mx-auto"
+      style="max-width: 400px"
+    >
+      <div class="mb-3">
+        <label>Email</label>
+        <input
+          [(ngModel)]="email"
+          name="emailRegister"
+          type="email"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label>Mot de passe</label>
+        <input
+          [(ngModel)]="password"
+          name="passwordRegister"
+          type="password"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label>Nom</label>
+        <input [(ngModel)]="nom" name="nom" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label>Prénom</label>
+        <input
+          [(ngModel)]="prenom"
+          name="prenom"
+          class="form-control"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-success w-100">S'inscrire</button>
+    </form>
+  </div>
+
+  <!-- Zone Connectée -->
+  <ng-template #connected>
+    <div class="text-center">
+      <h4 class="mb-3">
+        Bienvenue, {{ authService.getUtilisateur()?.nom }}
+        {{ authService.getUtilisateur()?.prenom }}
+      </h4>
+      <button class="btn btn-danger" (click)="logout()">Déconnexion</button>
+    </div>
+  </ng-template>
+
+  <!-- Message -->
+  <div *ngIf="message" class="alert alert-info text-center mt-4">
+    {{ message }}
+  </div>
+</div>
