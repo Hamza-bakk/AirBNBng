@@ -25,6 +25,10 @@ export class AdminComponent implements OnInit {
   }
 
   async enregistrerBien() {
+    const photosAEnvoyer = this.selectedFileBase64
+      ? [this.selectedFileBase64] // nouvelle photo sélectionnée
+      : this.bienForm.photos || []; // sinon garder photos actuelles
+
     const bien = new Bien({
       id: this.editerBienId || undefined,
       titre: this.bienForm.titre!,
@@ -37,7 +41,7 @@ export class AdminComponent implements OnInit {
       disponible: true,
       likes: 0,
       likedBy: [],
-      photos: this.selectedFileBase64 ? [this.selectedFileBase64] : [],
+      photos: photosAEnvoyer,
       equipements: this.bienForm.equipements || [],
     });
 

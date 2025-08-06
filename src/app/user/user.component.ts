@@ -18,7 +18,8 @@ export class UserComponent {
 
   constructor(
     private firebaseUserService: FirebaseUserService,
-    public authService: AuthService
+    public authService: AuthService,
+
   ) {}
 
   async register() {
@@ -27,7 +28,7 @@ export class UserComponent {
       password: this.password,
       nom: this.nom,
       prenom: this.prenom,
-      role: 'admin',
+      role: 'client',
       dateInscription: new Date(),
       actif: true,
     });
@@ -53,5 +54,6 @@ export class UserComponent {
   logout() {
     this.authService.logout();
     this.message = 'Déconnecté';
+    window.location.reload();
   }
 }

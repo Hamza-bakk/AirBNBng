@@ -2,6 +2,22 @@
   <h2 class="text-center mb-4">Nos Biens</h2>
 
   <div class="row">
+    <div class="mb-3">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Rechercher un bien (titre, ville, adresse, description, prix...)"
+        [(ngModel)]="texteRecherche"
+        (input)="rechercherBiens()"
+      />
+    </div>
+
+    <div *ngIf="biensAffiches.length === 0" class="alert alert-warning">
+      Aucun bien ne correspond à votre recherche.
+    </div>
+
+
+
     <div class="col-md-4 mb-4" *ngFor="let bien of biensAffiches">
       <div class="card shadow-sm h-100">
         <img
@@ -20,13 +36,11 @@
             Équipements : {{ bien.equipements.join(", ") }}
           </p>
           <button
-  class="btn btn-danger mt-auto w-100"
-  (click)="goToReservation(bien.id!)"
->
-  Réserver
-</button>
-
-
+            class="btn btn-danger mt-auto w-100"
+            (click)="goToReservation(bien.id!)"
+          >
+            Réserver
+          </button>
         </div>
       </div>
     </div>

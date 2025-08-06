@@ -12,6 +12,7 @@ import { AuthService } from '../services/auth.service';
 export class BienComponent implements OnInit {
   biens: Bien[] = [];
   biensAffiches: Bien[] = [];
+  texteRecherche: string = '';
   photos = 'abcdefghijklmnopqrstuv'.split('').map((l) => `/assets/${l}.png`);
   utilisateurs = [
     { id: 'u1', nom: 'Dupont', prenom: 'Jean' },
@@ -35,7 +36,27 @@ export class BienComponent implements OnInit {
     } else {
       this.biens = existants;
     }
-    this.afficherPlus();
+    this.biensAffiches = [...this.biens]; // initialisation complète
+  }
+
+  rechercherBiens() {
+    const txt = this.texteRecherche.trim().toLowerCase();
+
+    if (!txt) {
+      // si recherche vide, on affiche tout
+      this.biensAffiches = [...this.biens];
+      return;
+    }
+
+    // Sinon on filtre
+    this.biensAffiches = this.biens.filter((bien) => {
+      return (
+        bien.titre.toLowerCase().includes(txt) ||
+        bien.ville.toLowerCase().includes(txt) ||
+        bien.adresse.toLowerCase().includes(txt) ||
+        bien.description.toLowerCase().includes(txt)
+      );
+    });
   }
 
   async genererEtEnregistrerBiens() {
@@ -91,5 +112,4 @@ export class BienComponent implements OnInit {
       this.router.navigate(['/user']);
     }
   }
-  
 }

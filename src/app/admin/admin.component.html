@@ -83,7 +83,7 @@
     <div class="col-md-4 mb-4" *ngFor="let bien of biens">
       <div class="card h-100 shadow">
         <img
-          [src]="bien.photos[0] || 'assets/default.jpg'"
+          [src]="bien.photos"
           class="card-img-top"
           style="height: 200px; object-fit: cover"
         />
